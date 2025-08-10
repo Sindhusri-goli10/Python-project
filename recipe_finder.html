@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6">
+                <div class="text-center space-y-4">
+                    <h1 class="text-2xl font-bold text-gray-800">
+                        <i data-lucide="salad" class="inline mr-2"></i> Vegetable Recipe Finder
+                    </h1>
+                    <p class="text-gray-600">
+                        Upload a photo of your vegetables to get recipe suggestions or composting tips
+                    </p>
+
+                    <div id="uploadContainer" class="border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer transition-colors hover:border-green-400 hover:bg-gray-50">
+                        <input type="file" id="fileInput" accept="image/*" class="hidden">
+                        <div id="previewArea" class="space-y-4">
+                            <i data-lucide="upload-cloud" class="h-12 w-12 text-gray-400 mx-auto"></i>
+                            <p class="text-gray-500">Click to upload or drag & drop</p>
+                            <p class="text-xs text-gray-400">Supports JPG, PNG (Max 5MB)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/static/js/main.js"></script>
+{% endblock %}

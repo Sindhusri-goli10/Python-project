@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="hero-gradient py-16 md:py-20">
+    <div class="container mx-auto px-4 flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16">
+        <!-- Left Content -->
+        <div class="w-full md:w-1/2 space-y-6 text-center md:text-left">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-veggie-dark leading-tight">
+                Rescue Your Veggies,
+                <span class="text-veggie-primary block mt-2">Reduce Food Waste</span>
+            </h1>
+            <p class="text-md sm:text-lg text-gray-700">
+                Upload your leftover veggies and get recipe or compost ideas.
+            </p>
+            <div class="flex justify-center md:justify-start">
+                <a href="/recipe-finder">
+                    <button class="bg-veggie-primary hover:bg-veggie-primary/90 text-white px-6 py-4 sm:py-5 text-base sm:text-lg rounded-lg transition-all">
+                        Start Now
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Image -->
+        <div class="w-full md:w-1/2">
+            <img
+                src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"
+                alt="Fresh vegetables"
+                class="rounded-lg shadow-xl w-full h-auto object-cover"
+                loading="lazy"
+            />
+        </div>
+    </div>
+</section>
+{% endblock %}

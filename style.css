@@ -1,0 +1,34 @@
+/* This ensures your custom classes take precedence */
+@layer components {
+    .text-veggie-primary {
+        color: theme('colors.veggie-primary') !important;
+    }
+
+    .bg-veggie-primary {
+        background-color: theme('colors.veggie-primary') !important;
+    }
+
+    .hover\:bg-veggie-primary\/90:hover {
+        background-color: theme('colors.veggie-primary-90') !important;
+    }
+
+    .text-veggie-secondary {
+        color: theme('colors.veggie-secondary') !important;
+    }
+
+    .text-veggie-dark {
+        color: theme('colors.veggie-dark') !important;
+    }
+
+    .bg-veggie-dark {
+        background-color: theme('colors.veggie-dark') !important;
+    }
+
+    .bg-veggie-light\/50 {
+        background-color: rgba(232, 245, 233, 0.5) !important;
+    }
+
+    .hero-gradient {
+        background: linear-gradient(135deg, #E8F5E9 0%, #FFFFFF 100%) !important;
+    }
+}

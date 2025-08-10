@@ -1,0 +1,163 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="py-12 bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4">
+        {% if results %}
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <!-- Results Header -->
+            <div class="p-6 {{ 'bg-green-500' if results.is_fresh else 'bg-amber-500' }} text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold">
+                            {% if results.is_fresh %}
+                                <i data-lucide="salad" class="inline mr-2"></i> Fresh Vegetables Found!
+                            {% else %}
+                                <i data-lucide="alert-triangle" class="inline mr-2"></i> Composting Recommended
+                            {% endif %}
+                        </h1>
+                        <p class="mt-1 opacity-90">
+                            {% if results.is_fresh %}
+                                We found {{ results.detected_vegetables|length }} fresh vegetables
+                            {% else %}
+                                These vegetables are past their prime
+                            {% endif %}
+                        </p>
+                    </div>
+                    <a href="/recipe-finder" class="flex items-center text-sm bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full transition">
+                        <i data-lucide="arrow-left" class="h-4 w-4 mr-1"></i> Try another
+                    </a>
+                </div>
+            </div>
+
+            <!-- Detection Results -->
+            <div class="p-6 border-b">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i data-lucide="search" class="mr-2"></i> What We Found
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Vegetables List -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium text-gray-800 mb-2">Detected Vegetables</h3>
+                        <ul class="space-y-1">
+                            {% for veg in results.detected_vegetables %}
+                            <li class="capitalize flex items-center">
+                                <i data-lucide="carrot" class="h-4 w-4 mr-2 text-green-600"></i>
+                                {{ veg }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Freshness Prediction -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-medium text-gray-800 mb-2">Freshness Analysis</h3>
+                        <div class="flex items-center">
+                            {% if results.is_fresh %}
+                                <i data-lucide="check-circle" class="h-5 w-5 text-green-500 mr-2"></i>
+                                <span class="font-medium text-green-600">Fresh</span>
+                            {% else %}
+                                <i data-lucide="alert-circle" class="h-5 w-5 text-amber-500 mr-2"></i>
+                                <span class="font-medium text-amber-600">Not Fresh</span>
+                            {% endif %}
+                            <span class="ml-auto text-gray-500">
+                                {{ (results.freshness_info.confidence * 100)|round(1) }}% confidence
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Recommendations -->
+            {% if results.is_fresh and results.recommendations %}
+            <div class="p-6 border-b">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i data-lucide="utensils" class="mr-2"></i> Recommended Recipes
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    {% for recipe in results.recommendations %}
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                        {% if recipe.image_url %}
+                        <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_name }}" class="w-full h-48 object-cover">
+                        {% else %}
+                        <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                            <i data-lucide="image" class="h-12 w-12 text-gray-400"></i>
+                        </div>
+                        {% endif %}
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg mb-2">{{ recipe.recipe_name }}</h3>
+                            <a href="{{ recipe.recipe_link }}" target="_blank" rel="noopener noreferrer" 
+                            class="inline-flex items-center text-green-600 hover:text-green-800 mt-2">
+                                View Recipe <i data-lucide="external-link" class="ml-1 h-4 w-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Composting Guide -->
+            {% if not results.is_fresh and results.composting_info %}
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i data-lucide="recycle" class="mr-2"></i> Composting Guide
+                </h2>
+
+                {% for veg, info in results.composting_info.items() %}
+                <div class="bg-amber-50 p-6 rounded-lg mb-6">
+                    <h3 class="font-bold text-lg text-amber-800 mb-2 flex items-center">
+                        <i data-lucide="carrot" class="mr-2"></i> {{ veg|capitalize }}
+                    </h3>
+                    <div class="space-y-2">
+                        <p><span class="font-semibold">Method:</span> {{ info.recommended_method }}</p>
+                        <p><span class="font-semibold">Why:</span> {{ info.reason }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="bg-white p-4 rounded-lg border mt-6">
+                    <h4 class="font-semibold text-gray-800 flex items-center">
+                        <i data-lucide="lightbulb" class="mr-2"></i> Composting Tips
+                    </h4>
+                    <ul class="mt-2 space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                            Chop large pieces to speed up decomposition
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                            Mix with dry leaves or paper for better balance
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                            Turn your compost pile every few weeks
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <!-- No Results State -->
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden text-center p-8">
+            <i data-lucide="alert-circle" class="h-12 w-12 text-gray-400 mx-auto"></i>
+            <h2 class="mt-4 text-xl font-semibold text-gray-700">No Results Found</h2>
+            <p class="mt-2 text-gray-600">We couldn't process your image. Please try again.</p>
+            <a href="/recipe-finder" class="mt-6 inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition">
+                <i data-lucide="arrow-left" class="h-4 w-4 mr-2"></i> Back to Upload
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

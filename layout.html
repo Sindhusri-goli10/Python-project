@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veggie Recipe Rescue</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Define your custom colors in Tailwind config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'veggie-primary': '#4CAF50',
+                        'veggie-primary-90': 'rgba(76, 175, 80, 0.9)',
+                        'veggie-secondary': '#8BC34A',
+                        'veggie-dark': '#2E7D32',
+                        'veggie-light': '#E8F5E9',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Load Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load your custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="min-h-screen flex flex-col bg-white">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-2">
+                <div class="relative">
+                    <i data-lucide="leaf" class="h-6 w-6 text-veggie-primary"></i>
+                    <i data-lucide="recycle" class="h-4 w-4 text-veggie-secondary absolute -bottom-1 -right-1"></i>
+                </div>
+                <span class="font-bold text-xl text-veggie-dark">Veggie Recipe Rescue</span>
+            </a>
+            <nav class="flex gap-6">
+                <a href="/" class="font-medium {% if request.path == '/' %}text-veggie-primary border-b-2 border-veggie-primary{% else %}text-veggie-dark hover:text-veggie-primary{% endif %}">
+                    Home
+                </a>
+                <a href="/recipe-finder" class="font-medium {% if request.path == '/recipe-finder' %}text-veggie-primary border-b-2 border-veggie-primary{% else %}text-veggie-dark hover:text-veggie-primary{% endif %}">
+                    Veggie Rescue
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="bg-veggie-dark text-white py-6">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-300">
+            © {{ now.year }} Veggie Recipe Rescue. Fighting food waste one recipe at a time.
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
